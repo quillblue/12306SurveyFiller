@@ -11,6 +11,13 @@ namespace SurveyFiller
         public String Mobile{ get; set; }
         public String PassengerName { get; set; }
         public String PassengerIdentityNo { get; set; }
+        public UserInfo(String passengerName, String passengerIdentityNo, String userName, String email, String mobile) {
+            this.PassengerName = passengerName;
+            this.PassengerIdentityNo = passengerIdentityNo;
+            this.UserName = userName;
+            this.Email = email;
+            this.Mobile = mobile;
+        }
     }
 
     public class TrainInfo

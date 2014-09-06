@@ -12,33 +12,49 @@ namespace SurveyFiller
         public List<SurveyBaseInfo> LoadWorkList(string filePath, string accountConfigPath)
         {
             List<SurveyBaseInfo> Worklist = new List<SurveyBaseInfo>();
-            UserInfo ui = new UserInfo();
-            //Read Account Config
+            Dictionary<String, UserInfo> AccountDict = new Dictionary<string, UserInfo>();
+            DataSet ul = new DataSet();
+            #region ReadAccountConfig
             try
             {
                 Console.WriteLine("正在读取12306账户信息...");
-                FileStream fs = new FileStream(accountConfigPath, FileMode.OpenOrCreate);
-                StreamReader sr = new StreamReader(fs, Encoding.GetEncoding("gb2312"));
-                String line=sr.ReadLine().Trim();
-                ui.UserName = line.Substring(line.IndexOf(':') + 1);
-                line = sr.ReadLine().Trim();
-                ui.Email = line.Substring(line.IndexOf(':') + 1);
-                line = sr.ReadLine().Trim();
-                ui.Mobile = line.Substring(line.IndexOf(':') + 1);
-                line = sr.ReadLine().Trim();
-                ui.PassengerName = line.Substring(line.IndexOf(':') + 1);
-                line = sr.ReadLine().Trim();
-                ui.PassengerIdentityNo = line.Substring(line.IndexOf(':') + 1);
-                sr.Close();
-                fs.Close();
-                Console.WriteLine("读取12306账户信息成功");
-
+                String sUserConnectionString = "Provider=Microsoft.Jet.OleDb.4.0;" + "data source=" + accountConfigPath + ";Extended Properties='Excel 8.0; HDR=yes; IMEX=0'"; ;
+                OleDbConnection objConn = new OleDbConnection(sUserConnectionString);
+                objConn.Open();
+                OleDbCommand objCmdSelect = new OleDbCommand("SELECT * FROM [AccountConfig$]", objConn);
+                OleDbDataAdapter objAdapter = new OleDbDataAdapter();
+                objAdapter.SelectCommand = objCmdSelect;
+                objAdapter.Fill(ul);
+                for (int i = 0; i < ul.Tables[0].Rows.Count; i++)
+                {
+                    DataRow dr = ul.Tables[0].Rows[i];
+                    try
+                    {
+                        Console.WriteLine("正在识别第" + (i + 1) + "行");
+                        if (dr["乘车人"].ToString() != "" && dr["乘车人身份证号"].ToString() != "" && dr["用户名"].ToString() != "" && dr["邮箱地址"].ToString() != "" && dr["手机号码"].ToString() != "")
+                        {
+                            UserInfo ui=new UserInfo(dr["乘车人"].ToString(), dr["乘车人身份证号"].ToString(), dr["用户名"].ToString(), dr["邮箱地址"].ToString(), dr["手机号码"].ToString());
+                            AccountDict.Add(dr["乘车人"].ToString(), ui);
+                            Console.WriteLine("成功识别第" + (i + 1) + "行");
+                        }
+                        else
+                        {
+                            Console.WriteLine("该行内容为空或讯息不全，跳过");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("识别第" + (i + 1) + "行失败，错误原因" + e.ToString());
+                    }
+                }
+                Console.WriteLine("读取12306账户信息完成");
+                objConn.Close();
             }
             catch (Exception e) {
                 Console.WriteLine("读取12306账户信息配置文件失败，错误原因：" + e.ToString());
-                return Worklist;
             }
-            
+            #endregion 
+
             //Load station dictionary
             StationNameTranslation snt = new StationNameTranslation();
             snt.LoadDict();
@@ -62,7 +78,14 @@ namespace SurveyFiller
                         if (dr["乘车日期"].ToString() != "")
                         {
                             TrainInfo ti = new TrainInfo(Convert.ToDateTime(dr["乘车日期"]).ToString("yyyy-MM-dd").Substring(0, 10), dr["所乘车次"].ToString(), snt.GetTelegramCode(dr["票面乘车站"].ToString()), snt.GetTelegramCode(dr["票面下车站"].ToString()));
-                            Worklist.Add(new SurveyBaseInfo(ui, ti));
+                            try
+                            {
+                                Worklist.Add(new SurveyBaseInfo(AccountDict[dr["乘车人"].ToString()], ti));
+                            }
+                            catch (Exception e) 
+                            {
+                                Console.WriteLine("乘车人信息列表中中找不到名为"+dr["乘车人"].ToString()+"的信息");
+                            }      
                             Console.WriteLine("成功识别第" + (i + 1) + "行");
                         }
                         else
@@ -72,8 +95,9 @@ namespace SurveyFiller
                     }
                     catch (Exception e) {
                         Console.WriteLine("识别第" + (i + 1) + "行失败，错误原因"+e.ToString());
+                        UserInfo ui = new UserInfo("###", "###", "###", "###", "###");
                         TrainInfo ti = new TrainInfo("###", e.ToString(), "###", "###");
-                        Worklist.Add(new SurveyBaseInfo(ui,ti));
+                        Worklist.Add(new SurveyBaseInfo(ui, ti));
                     }
                     
                 }
@@ -81,6 +105,7 @@ namespace SurveyFiller
             catch (Exception e) {
                 Console.WriteLine("读取Excel文件失败，错误原因" + e.ToString());
             }
+
             return Worklist;
         }
 

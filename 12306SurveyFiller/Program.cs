@@ -12,9 +12,10 @@ namespace SurveyFiller
             Console.WriteLine("请输入待填问卷列表所位于的Excel文件的文件名（目前仅支持Excel 97-2003）,直接敲回车默认为1.xls");
             String FilePath = Console.ReadLine().Trim();
             if (FilePath == "") { FilePath = "1.xls"; }
-            Console.WriteLine("请输入12306账户配置文件名后回车（直接敲回车默认为AccountConfig.txt)");
-            String AccountConfigPath = Console.ReadLine();
-            if (AccountConfigPath == "") { AccountConfigPath = "AccountConfig.txt"; }
+            //Console.WriteLine("请输入12306账户配置文件名后回车（目前仅支持Excel 97-2003,直接敲回车默认为同上)");
+            //String AccountConfigPath = Console.ReadLine();
+            //if (AccountConfigPath == "") { AccountConfigPath = FilePath; }
+            String AccountConfigPath = FilePath;
             Console.WriteLine("请选择评价类型：1.全部满意，2.一般评价（输入1或2后回车选择）,直接敲回车默认为全部满意");
             int Option = 0;
             String inputOption = Console.ReadLine().Trim();
