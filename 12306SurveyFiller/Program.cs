@@ -39,6 +39,7 @@ namespace SurveyFiller
                 }
                 else
                 {
+                    String temp = wc.FetchValidationCode("zhidingxi01");
                     String response = wc.FillSurvey(sbi, Option);
                     if (response[0] == '0')
                     {
