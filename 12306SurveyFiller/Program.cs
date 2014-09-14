@@ -9,12 +9,11 @@ namespace SurveyFiller
         static void Main(string[] args)
         {
             SurveyControl sc = new SurveyControl();
+            ValidationCodeProcessing vcp = new ValidationCodeProcessing();
+
             Console.WriteLine("请输入待填问卷列表所位于的Excel文件的文件名（目前仅支持Excel 97-2003）,直接敲回车默认为1.xls");
             String FilePath = Console.ReadLine().Trim();
             if (FilePath == "") { FilePath = "1.xls"; }
-            //Console.WriteLine("请输入12306账户配置文件名后回车（目前仅支持Excel 97-2003,直接敲回车默认为同上)");
-            //String AccountConfigPath = Console.ReadLine();
-            //if (AccountConfigPath == "") { AccountConfigPath = FilePath; }
             String AccountConfigPath = FilePath;
             Console.WriteLine("请选择评价类型：1.全部满意，2.一般评价（输入1或2后回车选择）,直接敲回车默认为全部满意");
             int Option = 0;
@@ -25,7 +24,7 @@ namespace SurveyFiller
             List<SurveyBaseInfo> SuccessList = new List<SurveyBaseInfo>();
             List<SurveyBaseInfo> FailedList = new List<SurveyBaseInfo>();
             List<String> ResultList = new List<string>();
-            WebControl wc = new WebControl();
+            Dictionary<String, ValidationCodeInfo> VcList = new Dictionary<string, ValidationCodeInfo>();
 
             Console.WriteLine("开始提交问卷...");
             int i = 1;
@@ -39,8 +38,8 @@ namespace SurveyFiller
                 }
                 else
                 {
-                    String temp = wc.FetchValidationCode("zhidingxi01");
-                    String response = wc.FillSurvey(sbi, Option);
+                    String temp = vcp.FetchValidationCode("zhidingxi01");
+                    String response = sc.FillSurvey(sbi, Option);
                     if (response[0] == '0')
                     {
                         Console.WriteLine("提交第" + i + "张问卷失败，失败原因：" + response.Substring(2));

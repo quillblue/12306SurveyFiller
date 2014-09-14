@@ -34,6 +34,19 @@ namespace SurveyFiller
         }
     }
 
+    public class ValidationCodeInfo
+    {
+        public String UserName { get; private set; }
+        public String SeqNo { get; set; }
+        public String Vc { get; set; }
+        public ValidationCodeInfo(String userName, String seqNo)
+        {
+            this.UserName = userName;
+            this.SeqNo = seqNo;
+            this.Vc = "";
+        }
+    }
+
     public class SurveyBaseInfo {
         public UserInfo UserAccount;
         public TrainInfo TravelRecord;
