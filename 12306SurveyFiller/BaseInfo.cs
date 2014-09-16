@@ -7,16 +7,26 @@ namespace SurveyFiller
     public class UserInfo
     {
         public String UserName { get; set; }
-        public String Email{ get; set; }
-        public String Mobile{ get; set; }
+        public String Email { get; set; }
+        public String Mobile { get; set; }
         public String PassengerName { get; set; }
         public String PassengerIdentityNo { get; set; }
-        public UserInfo(String passengerName, String passengerIdentityNo, String userName, String email, String mobile) {
+        public UserInfo(String passengerName, String passengerIdentityNo, String userName, String email, String mobile)
+        {
             this.PassengerName = passengerName;
             this.PassengerIdentityNo = passengerIdentityNo;
             this.UserName = userName;
             this.Email = email;
             this.Mobile = mobile;
+        }
+
+        public UserInfo(String userName)
+        {
+            this.UserName = userName;
+            this.PassengerName = "";
+            this.PassengerIdentityNo = "";
+            this.Email = "";
+            this.Mobile = "";
         }
     }
 
@@ -26,7 +36,8 @@ namespace SurveyFiller
         public String TravelTrainNumber { get; private set; }
         public String OnBoardStation { get; private set; }
         public String OffBoardStation { get; private set; }
-        public TrainInfo(String travelDate, String travelTrainNumber, String onBoardStation, String offBoardStation) {
+        public TrainInfo(String travelDate, String travelTrainNumber, String onBoardStation, String offBoardStation)
+        {
             this.TravelDate = travelDate;
             this.TravelTrainNumber = travelTrainNumber;
             this.OnBoardStation = onBoardStation;
@@ -34,29 +45,20 @@ namespace SurveyFiller
         }
     }
 
-    public class ValidationCodeInfo
+    public class SurveyBaseInfo
     {
-        public String UserName { get; private set; }
-        public String SeqNo { get; set; }
-        public String Vc { get; set; }
-        public ValidationCodeInfo(String userName, String seqNo)
-        {
-            this.UserName = userName;
-            this.SeqNo = seqNo;
-            this.Vc = "";
-        }
-    }
-
-    public class SurveyBaseInfo {
         public UserInfo UserAccount;
         public TrainInfo TravelRecord;
         public String SurveyNumber;
-        public SurveyBaseInfo(UserInfo ua, TrainInfo tr) {
+        public SurveyBaseInfo(UserInfo ua, TrainInfo tr)
+        {
             this.UserAccount = ua;
             this.TravelRecord = tr;
         }
-        public String WrapSurveyBaseInfo() {
-            String info = "{userName:" + this.UserAccount.UserName +",name:" + this.UserAccount.PassengerName + ",id_no:" + this.UserAccount.PassengerIdentityNo + ",contact_no:" + this.UserAccount.Mobile + ",email:" + this.UserAccount.Email + ",datepicker:" + this.TravelRecord.TravelDate + ",board_train_no:" + this.TravelRecord.TravelTrainNumber + ",board_station:" + this.TravelRecord.OnBoardStation + ",down_station:" + this.TravelRecord.OffBoardStation + "}";
+        public String WrapSurveyBaseInfo()
+        {
+            //String info = "{userName:" + this.UserAccount.UserName +",name:" + this.UserAccount.PassengerName + ",id_no:" + this.UserAccount.PassengerIdentityNo + ",contact_no:" + this.UserAccount.Mobile + ",email:" + this.UserAccount.Email + ",datepicker:" + this.TravelRecord.TravelDate + ",board_train_no:" + this.TravelRecord.TravelTrainNumber + ",board_station:" + this.TravelRecord.OnBoardStation + ",down_station:" + this.TravelRecord.OffBoardStation + "}";
+            String info = "{userName:" + this.UserAccount.UserName + ",datepicker:" + this.TravelRecord.TravelDate + ",board_train_no:" + this.TravelRecord.TravelTrainNumber + ",board_station:" + this.TravelRecord.OnBoardStation + ",down_station:" + this.TravelRecord.OffBoardStation + "}";
             return info;
         }
     }

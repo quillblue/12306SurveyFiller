@@ -5,9 +5,11 @@ using System.Text;
 namespace SurveyFiller
 {
     class Program
-    {
+    {   
+        
         static void Main(string[] args)
         {
+            WebControl wc =WebControl.Instance();
             SurveyControl sc = new SurveyControl();
             ValidationCodeProcessing vcp = new ValidationCodeProcessing();
 
@@ -38,7 +40,8 @@ namespace SurveyFiller
                 }
                 else
                 {
-                    String temp = vcp.FetchValidationCode("zhidingxi01");
+                    String validate = vcp.Validation("quillqian");
+                    Console.WriteLine(validate);
                     String response = sc.FillSurvey(sbi, Option);
                     if (response[0] == '0')
                     {

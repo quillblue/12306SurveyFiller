@@ -9,8 +9,8 @@ namespace SurveyFiller
 {
     public class SurveyControl
     {
-        WebControl wc = new WebControl();
-        
+        WebControl wc = WebControl.Instance();
+
         public List<SurveyBaseInfo> LoadWorkList(string filePath, string accountConfigPath)
         {
             List<SurveyBaseInfo> Worklist = new List<SurveyBaseInfo>();

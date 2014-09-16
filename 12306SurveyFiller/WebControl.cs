@@ -7,23 +7,39 @@ using Newtonsoft.Json;
 
 namespace SurveyFiller
 {
-    public class WebControl
+    public sealed class WebControl
     {
-        public WebControl()
+        private static WebControl _instance;
+        private CookieCollection COOKIES = new CookieCollection();
+        CookieContainer co;
+
+        private WebControl()
         {
             System.Net.ServicePointManager.Expect100Continue = false;
+            co = new CookieContainer();
+        }
+
+        public static WebControl Instance()
+        {
+            if (_instance == null)
+            {
+                _instance = new WebControl();
+            }
+
+            return _instance;
         }
 
         public String PostHttpRequest(String URL, String postdata)
         {
-            CookieContainer co = new CookieContainer();
             HttpWebRequest request = WebRequest.Create(URL) as HttpWebRequest;
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
             request.UserAgent = @"Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6";
             request.KeepAlive = true;
-            request.Referer = @"http://www.12306.cn/";
-            request.Accept = @"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = postdata.Length;
+            request.Referer = @"http://dynamic.12306.cn/surweb/questionnaireAction.do?method=surveyNote";
+            request.Accept = @"application/json, text/javascript, */*";
             request.CookieContainer = co;
             try
             {
@@ -32,6 +48,7 @@ namespace SurveyFiller
                 stream.Write(data, 0, data.Length);
                 stream.Close();
                 HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                COOKIES = response.Cookies;
                 Stream responseStream = response.GetResponseStream();
                 StreamReader reader = new StreamReader(responseStream, Encoding.GetEncoding("UTF-8"));
                 string st = reader.ReadToEnd();
