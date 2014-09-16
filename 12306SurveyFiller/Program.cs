@@ -26,7 +26,6 @@ namespace SurveyFiller
             List<SurveyBaseInfo> SuccessList = new List<SurveyBaseInfo>();
             List<SurveyBaseInfo> FailedList = new List<SurveyBaseInfo>();
             List<String> ResultList = new List<string>();
-            Dictionary<String, ValidationCodeInfo> VcList = new Dictionary<string, ValidationCodeInfo>();
 
             Console.WriteLine("开始提交问卷...");
             int i = 1;
@@ -40,8 +39,8 @@ namespace SurveyFiller
                 }
                 else
                 {
-                    String validate = vcp.Validation("quillqian");
-                    Console.WriteLine(validate);
+                    String validate = vcp.Validation(sbi.UserName);
+
                     String response = sc.FillSurvey(sbi, Option);
                     if (response[0] == '0')
                     {

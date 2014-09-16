@@ -4,32 +4,6 @@ using System.Text;
 
 namespace SurveyFiller
 {
-    public class UserInfo
-    {
-        public String UserName { get; set; }
-        public String Email { get; set; }
-        public String Mobile { get; set; }
-        public String PassengerName { get; set; }
-        public String PassengerIdentityNo { get; set; }
-        public UserInfo(String passengerName, String passengerIdentityNo, String userName, String email, String mobile)
-        {
-            this.PassengerName = passengerName;
-            this.PassengerIdentityNo = passengerIdentityNo;
-            this.UserName = userName;
-            this.Email = email;
-            this.Mobile = mobile;
-        }
-
-        public UserInfo(String userName)
-        {
-            this.UserName = userName;
-            this.PassengerName = "";
-            this.PassengerIdentityNo = "";
-            this.Email = "";
-            this.Mobile = "";
-        }
-    }
-
     public class TrainInfo
     {
         public String TravelDate { get; private set; }
@@ -47,18 +21,18 @@ namespace SurveyFiller
 
     public class SurveyBaseInfo
     {
-        public UserInfo UserAccount;
+        public String UserName;
         public TrainInfo TravelRecord;
         public String SurveyNumber;
-        public SurveyBaseInfo(UserInfo ua, TrainInfo tr)
+        public SurveyBaseInfo(String userName, TrainInfo tr)
         {
-            this.UserAccount = ua;
+            this.UserName = userName;
             this.TravelRecord = tr;
         }
         public String WrapSurveyBaseInfo()
         {
             //String info = "{userName:" + this.UserAccount.UserName +",name:" + this.UserAccount.PassengerName + ",id_no:" + this.UserAccount.PassengerIdentityNo + ",contact_no:" + this.UserAccount.Mobile + ",email:" + this.UserAccount.Email + ",datepicker:" + this.TravelRecord.TravelDate + ",board_train_no:" + this.TravelRecord.TravelTrainNumber + ",board_station:" + this.TravelRecord.OnBoardStation + ",down_station:" + this.TravelRecord.OffBoardStation + "}";
-            String info = "{userName:" + this.UserAccount.UserName + ",datepicker:" + this.TravelRecord.TravelDate + ",board_train_no:" + this.TravelRecord.TravelTrainNumber + ",board_station:" + this.TravelRecord.OnBoardStation + ",down_station:" + this.TravelRecord.OffBoardStation + "}";
+            String info = "{userName:" + this.UserName + ",datepicker:" + this.TravelRecord.TravelDate + ",board_train_no:" + this.TravelRecord.TravelTrainNumber + ",board_station:" + this.TravelRecord.OnBoardStation + ",down_station:" + this.TravelRecord.OffBoardStation + "}";
             return info;
         }
     }
