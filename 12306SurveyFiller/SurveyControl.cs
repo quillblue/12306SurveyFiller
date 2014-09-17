@@ -9,51 +9,12 @@ namespace SurveyFiller
 {
     public class SurveyControl
     {
+        WebControl wc = WebControl.Instance();
+
         public List<SurveyBaseInfo> LoadWorkList(string filePath, string accountConfigPath)
         {
             List<SurveyBaseInfo> Worklist = new List<SurveyBaseInfo>();
-            Dictionary<String, UserInfo> AccountDict = new Dictionary<string, UserInfo>();
             DataSet ul = new DataSet();
-            #region ReadAccountConfig
-            try
-            {
-                Console.WriteLine("正在读取12306账户信息...");
-                String sUserConnectionString = "Provider=Microsoft.Jet.OleDb.4.0;" + "data source=" + accountConfigPath + ";Extended Properties='Excel 8.0; HDR=yes; IMEX=0'"; ;
-                OleDbConnection objConn = new OleDbConnection(sUserConnectionString);
-                objConn.Open();
-                OleDbCommand objCmdSelect = new OleDbCommand("SELECT * FROM [AccountConfig$]", objConn);
-                OleDbDataAdapter objAdapter = new OleDbDataAdapter();
-                objAdapter.SelectCommand = objCmdSelect;
-                objAdapter.Fill(ul);
-                for (int i = 0; i < ul.Tables[0].Rows.Count; i++)
-                {
-                    DataRow dr = ul.Tables[0].Rows[i];
-                    try
-                    {
-                        Console.WriteLine("正在识别第" + (i + 1) + "行");
-                        if (dr["乘车人"].ToString() != "" && dr["乘车人身份证号"].ToString() != "" && dr["用户名"].ToString() != "" && dr["邮箱地址"].ToString() != "" && dr["手机号码"].ToString() != "")
-                        {
-                            UserInfo ui=new UserInfo(dr["乘车人"].ToString(), dr["乘车人身份证号"].ToString(), dr["用户名"].ToString(), dr["邮箱地址"].ToString(), dr["手机号码"].ToString());
-                            AccountDict.Add(dr["乘车人"].ToString(), ui);
-                            Console.WriteLine("成功识别第" + (i + 1) + "行");
-                        }
-                        else
-                        {
-                            Console.WriteLine("该行内容为空或讯息不全，跳过");
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("识别第" + (i + 1) + "行失败，错误原因" + e.ToString());
-                    }
-                }
-                Console.WriteLine("读取12306账户信息完成");
-                objConn.Close();
-            }
-            catch (Exception e) {
-                Console.WriteLine("读取12306账户信息配置文件失败，错误原因：" + e.ToString());
-            }
-            #endregion 
 
             //Load station dictionary
             StationNameTranslation snt = new StationNameTranslation();
@@ -78,14 +39,8 @@ namespace SurveyFiller
                         if (dr["乘车日期"].ToString() != "")
                         {
                             TrainInfo ti = new TrainInfo(Convert.ToDateTime(dr["乘车日期"]).ToString("yyyy-MM-dd").Substring(0, 10), dr["所乘车次"].ToString(), snt.GetTelegramCode(dr["票面乘车站"].ToString()), snt.GetTelegramCode(dr["票面下车站"].ToString()));
-                            try
-                            {
-                                Worklist.Add(new SurveyBaseInfo(AccountDict[dr["乘车人"].ToString()], ti));
-                            }
-                            catch (Exception e) 
-                            {
-                                Console.WriteLine("乘车人信息列表中中找不到名为"+dr["乘车人"].ToString()+"的信息");
-                            }      
+                            String username = dr["用户名"].ToString();
+                            Worklist.Add(new SurveyBaseInfo(username, ti));
                             Console.WriteLine("成功识别第" + (i + 1) + "行");
                         }
                         else
@@ -95,9 +50,9 @@ namespace SurveyFiller
                     }
                     catch (Exception e) {
                         Console.WriteLine("识别第" + (i + 1) + "行失败，错误原因"+e.ToString());
-                        UserInfo ui = new UserInfo("###", "###", "###", "###", "###");
+                        String username = "###";
                         TrainInfo ti = new TrainInfo("###", e.ToString(), "###", "###");
-                        Worklist.Add(new SurveyBaseInfo(ui, ti));
+                        Worklist.Add(new SurveyBaseInfo(username, ti));
                     }
                     
                 }
@@ -130,24 +85,52 @@ namespace SurveyFiller
             sw.WriteLine("===================");
             sw.WriteLine("2.填写成功的问卷列表(可直接复制到Excel)");
             sw.WriteLine("");
-            sw.WriteLine("乘车人\t乘车日期\t所乘车次\t票面乘车站\t票面下车站\t问卷编号");
+            sw.WriteLine("乘车人用户名\t乘车日期\t所乘车次\t票面乘车站\t票面下车站\t问卷编号");
             foreach (SurveyBaseInfo sbi in successList) {
-                sw.WriteLine(sbi.UserAccount.PassengerName+"\t"+sbi.TravelRecord.TravelDate + "\t" + sbi.TravelRecord.TravelTrainNumber + "\t" + snt.GetStationName(sbi.TravelRecord.OnBoardStation) + "\t" + snt.GetStationName(sbi.TravelRecord.OffBoardStation)+"\t"+sbi.SurveyNumber);
+                sw.WriteLine(sbi.UserName+"\t"+sbi.TravelRecord.TravelDate + "\t" + sbi.TravelRecord.TravelTrainNumber + "\t" + snt.GetStationName(sbi.TravelRecord.OnBoardStation) + "\t" + snt.GetStationName(sbi.TravelRecord.OffBoardStation)+"\t"+sbi.SurveyNumber);
             }
 
             sw.WriteLine("");
             sw.WriteLine("===================");
             sw.WriteLine("3.填写失败的问卷列表(可直接复制到Excel)");
             sw.WriteLine("");
-            sw.WriteLine("乘车人\t乘车日期\t所乘车次\t票面乘车站\t票面下车站\t失败原因");
+            sw.WriteLine("乘车人用户名\t乘车日期\t所乘车次\t票面乘车站\t票面下车站\t失败原因");
             foreach (SurveyBaseInfo sbi in failedList)
             {
-                sw.WriteLine(sbi.UserAccount.PassengerName+"\t"+sbi.TravelRecord.TravelDate + "\t" + sbi.TravelRecord.TravelTrainNumber + "\t" + snt.GetStationName(sbi.TravelRecord.OnBoardStation) + "\t" + snt.GetStationName(sbi.TravelRecord.OffBoardStation) + "\t" + sbi.SurveyNumber);
+                sw.WriteLine(sbi.UserName+"\t"+sbi.TravelRecord.TravelDate + "\t" + sbi.TravelRecord.TravelTrainNumber + "\t" + snt.GetStationName(sbi.TravelRecord.OnBoardStation) + "\t" + snt.GetStationName(sbi.TravelRecord.OffBoardStation) + "\t" + sbi.SurveyNumber);
             }
 
             sw.Close();
             fs.Close();
             return Filename;
+        }
+
+        public String FillSurvey(SurveyBaseInfo sbi, int option)
+        {
+            if (sbi.TravelRecord.OnBoardStation[0] == '#')
+            {
+                return "0#票面乘车站" + sbi.TravelRecord.OnBoardStation.Substring(1) + "未能被翻译为电报码，请检查站名是否准确\n";
+            }
+            if (sbi.TravelRecord.OffBoardStation[0] == '#')
+            {
+                return "0#票面下车站" + sbi.TravelRecord.OffBoardStation.Substring(1) + "未能被翻译为电报码，请检查站名是否准确\n";
+            }
+            String passengerInfoAnswer = sbi.WrapSurveyBaseInfo();
+            String questionRadioAnswer = "";
+            if (option == 0)
+            {
+                questionRadioAnswer = "{1:007,2:027,3:007,4:007,5:007,6:074,7:037,8:017,9:017,10:017,11:007,12:007,13:017,14:037,15:017,16:127,17:057,18:017,19:007,20:017,21:017,22:017,23:017,24:017,25:007,26:017,27:017,28:017,29:017,30:017,31:017,32:017,33:017,34:017,35:057,36:087,37:017,38:017,39:017,40:017,41:007,42:017,43:017,44:017,45:017,46:017,47:017,48:017,49:017,50:007,51:017,52:017,53:017,54:017,55:017,56:017,57:017,58:017,59:017,60:017,61:017,62:017,63:017,64:017,65:087,66:057,67:017,68:017,69:017,70:097,71:017,72:017,73:017,74:017,75:017,76:067,77:117,101:225,102:204,103:207,104:227,105:213}";
+            }
+            else
+            {
+                questionRadioAnswer = "{1:005,3:005,6:073,7:033,15:004,16:004,17:004,18:004,20:004,21:004,22:004,26:004,30:004,31:004,36:004,37:004,38:004,39:004,40:004,42:015,44:004,45:004,46:004,51:004,52:013,55:013,56:013,63:004,64:004,65:004,66:004,67:004,68:004,70:004,73:004,74:004,75:004,76:004,77:004,101:225,102:202,103:209,104:222,105:213}";
+            }
+            String otherAnswer = "{78:购票的方便程度/车站的旅客引导信息/进站上车的过程/,79:,80:,81:车票的价格/}";
+            String PostData = "passengerInfoAnswer=" + passengerInfoAnswer + "&questionRadioAnswer=" + questionRadioAnswer + "&otherAnswer=" + otherAnswer;
+            String msg;
+            //msg = PostRequest("http://dynamic.12306.cn/surweb/questionnaireAction.do?method=submitQuest", PostData);
+            msg = wc.PostSurvey(PostData);
+            return msg;
         }
     }
 }
