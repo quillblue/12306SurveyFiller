@@ -5,11 +5,11 @@ using System.Text;
 namespace SurveyFiller
 {
     class Program
-    {   
-        
+    {
+
         static void Main(string[] args)
         {
-            WebControl wc =WebControl.Instance();
+            WebControl wc = WebControl.Instance();
             SurveyControl sc = new SurveyControl();
             ValidationCodeProcessing vcp = new ValidationCodeProcessing();
 
@@ -22,12 +22,12 @@ namespace SurveyFiller
             String inputOption = Console.ReadLine().Trim();
             if (inputOption == "2") { Option = 1; }
 
-            List<SurveyBaseInfo> WorkList = sc.LoadWorkList(FilePath,AccountConfigPath);
+            List<SurveyBaseInfo> WorkList = sc.LoadWorkList(FilePath, AccountConfigPath);
             List<SurveyBaseInfo> SuccessList = new List<SurveyBaseInfo>();
             List<SurveyBaseInfo> FailedList = new List<SurveyBaseInfo>();
             List<String> ResultList = new List<string>();
 
-            Console.WriteLine("开始提交问卷...");
+            Console.WriteLine("开始提交问卷...为减少问卷系统-21180的出现，请您在收到短信后稍过几秒再填写验证码。");
             int i = 1;
             foreach (SurveyBaseInfo sbi in WorkList)
             {
@@ -40,8 +40,16 @@ namespace SurveyFiller
                 else
                 {
                     String validate = vcp.Validation(sbi.UserName);
+                    String response = "";
+                    if (validate != "ok")
+                    {
+                        response = validate;
+                    }
+                    else
+                    {
+                        response = sc.FillSurvey(sbi, Option);
+                    }
 
-                    String response = sc.FillSurvey(sbi, Option);
                     if (response[0] == '0')
                     {
                         Console.WriteLine("提交第" + i + "张问卷失败，失败原因：" + response.Substring(2));
@@ -60,8 +68,8 @@ namespace SurveyFiller
                 i++;
             }
             Console.WriteLine("正在输出结果到文件...");
-            String OutputFileName=sc.Output(SuccessList, FailedList, ResultList);
-            Console.WriteLine("程序运行完成，请到程序目录下查看名为\""+OutputFileName+"\"的输出文件，按任意键退出程序");
+            String OutputFileName = sc.Output(SuccessList, FailedList, ResultList);
+            Console.WriteLine("程序运行完成，请到程序目录下查看名为\"" + OutputFileName + "\"的输出文件，按任意键退出程序");
             Console.ReadLine();
         }
 

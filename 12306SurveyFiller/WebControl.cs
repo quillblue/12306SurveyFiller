@@ -83,7 +83,7 @@ namespace SurveyFiller
                         st = st.Substring(msgStart);
                         int msgEnd = st.IndexOf('"');
                         st = st.Substring(0, msgEnd);
-                        if (st == "") { return "0#-21180"; }
+                        if (st == "") { return "0#问卷系统未知错误"; }
                         return "0#" + st;
                     }
                 }
