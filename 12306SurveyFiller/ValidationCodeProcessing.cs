@@ -68,12 +68,12 @@ namespace SurveyFiller
             String translation = "";
             switch (errorCode)
             {
-                case "fail": translation = "当前用户过多或验证码输入错误"; break;
-                case "busFail": translation = "busFail"; break;
-                case "uName_error": translation = "用户名不正确"; break;
-                case "session_timeout": translation = "当前验证码已过期"; break;
+                case "#fail": translation = "当前用户过多或验证码输入错误"; break;
+                case "#busFail": translation = "busFail"; break;
+                case "#uName_error": translation = "用户名不正确"; break;
+                case "#session_timeout": translation = "当前验证码已过期"; break;
                 case "system_unknownError": translation = "问卷系统异常"; break;
-                default: translation = "验证过程中出现未知错误"; break;
+                default: translation = "验证过程中出现未知错误," + errorCode; break;
             }
             return "0#" + translation;
         }
