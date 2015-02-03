@@ -11,7 +11,7 @@ namespace SurveyFiller
     {
         WebControl wc = WebControl.Instance();
 
-        public List<SurveyBaseInfo> LoadWorkList(string filePath, string accountConfigPath)
+        public List<SurveyBaseInfo> LoadWorkList(string filePath)
         {
             List<SurveyBaseInfo> Worklist = new List<SurveyBaseInfo>();
             DataSet ul = new DataSet();
@@ -35,23 +35,17 @@ namespace SurveyFiller
                     DataRow dr=workListDataset.Tables[0].Rows[i];
                     try
                     {
-                        Console.WriteLine("正在识别第"+(i+1)+"行");
                         if (dr["乘车日期"].ToString() != "")
                         {
                             TrainInfo ti = new TrainInfo(Convert.ToDateTime(dr["乘车日期"]).ToString("yyyy-MM-dd").Substring(0, 10), dr["所乘车次"].ToString(), snt.GetTelegramCode(dr["票面乘车站"].ToString()), snt.GetTelegramCode(dr["票面下车站"].ToString()));
                             String username = dr["用户名"].ToString();
                             Worklist.Add(new SurveyBaseInfo(username, ti));
-                            Console.WriteLine("成功识别第" + (i + 1) + "行");
-                        }
-                        else
-                        {
-                            Console.WriteLine("该行内容为空，跳过");
                         }
                     }
                     catch (Exception e) {
                         Console.WriteLine("识别第" + (i + 1) + "行失败，错误原因"+e.ToString());
                         String username = "###";
-                        TrainInfo ti = new TrainInfo("###", e.ToString(), "###", "###");
+                        TrainInfo ti = new TrainInfo("###", "###", "###", "###");
                         Worklist.Add(new SurveyBaseInfo(username, ti));
                     }
                     

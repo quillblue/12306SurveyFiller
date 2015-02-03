@@ -11,14 +11,12 @@ namespace SurveyFiller
 {
     public partial class FormMain : Form
     {
+        SurveyControl sc = new SurveyControl();
+        List<SurveyBaseInfo> workLoad = new List<SurveyBaseInfo>();
+
         public FormMain()
         {
             InitializeComponent();
-        }
-
-        private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
-        {
-
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)
@@ -28,6 +26,28 @@ namespace SurveyFiller
             if (ofd.ShowDialog() == DialogResult.OK) {
                 textBoxFilePath.Text = ofd.FileName;
             }
+        }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            workLoad = sc.LoadWorkList(textBoxFilePath.Text);
+            updateWorkLoadPanel();
+            PanelTimer.Enabled = true;
+        }
+
+        private void updateWorkLoadPanel() {
+            dataGridViewWorkList.Rows.Clear();
+            foreach (SurveyBaseInfo sbi in workLoad)
+            {
+                String[] row = { sbi.UserName, sbi.TravelRecord.TravelDate,sbi.TravelRecord.TravelTrainNumber,sbi.TravelRecord.OnBoardStation,sbi.TravelRecord.OffBoardStation,sbi.SurveyStatus,sbi.SurveyNumber };
+                dataGridViewWorkList.Rows.Add(row);
+            }
+
+        }
+
+        private void PanelTimer_Tick(object sender, EventArgs e)
+        {
+            updateWorkLoadPanel();
         }
 
 

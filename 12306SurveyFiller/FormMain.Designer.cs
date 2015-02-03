@@ -29,9 +29,15 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DelayTimer = new System.Windows.Forms.Timer(this.components);
             this.btnBrowse = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridViewWorkList = new System.Windows.Forms.DataGridView();
             this.panelCheckSM = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.btnCheckSMSubmit = new System.Windows.Forms.Button();
@@ -46,7 +52,16 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.btnStart = new System.Windows.Forms.Button();
+            this.userName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.travelDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.trainNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.upBoundStation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.offBoundStation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.surveyNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PanelTimer = new System.Windows.Forms.Timer(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWorkList)).BeginInit();
             this.panelCheckSM.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,17 +79,25 @@
             this.btnBrowse.UseVisualStyleBackColor = true;
             this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
-            // dataGridView1
+            // dataGridViewWorkList
             // 
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(19, 116);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(383, 267);
-            this.dataGridView1.TabIndex = 2;
+            this.dataGridViewWorkList.AllowUserToAddRows = false;
+            this.dataGridViewWorkList.AllowUserToDeleteRows = false;
+            this.dataGridViewWorkList.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dataGridViewWorkList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewWorkList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.userName,
+            this.travelDate,
+            this.trainNo,
+            this.upBoundStation,
+            this.offBoundStation,
+            this.status,
+            this.surveyNumber});
+            this.dataGridViewWorkList.Location = new System.Drawing.Point(19, 274);
+            this.dataGridViewWorkList.Name = "dataGridViewWorkList";
+            this.dataGridViewWorkList.RowTemplate.Height = 23;
+            this.dataGridViewWorkList.Size = new System.Drawing.Size(656, 199);
+            this.dataGridViewWorkList.TabIndex = 2;
             // 
             // panelCheckSM
             // 
@@ -89,7 +112,7 @@
             this.panelCheckSM.Controls.Add(this.label6);
             this.panelCheckSM.Controls.Add(this.label5);
             this.panelCheckSM.Controls.Add(this.label1);
-            this.panelCheckSM.Location = new System.Drawing.Point(422, 227);
+            this.panelCheckSM.Location = new System.Drawing.Point(428, 103);
             this.panelCheckSM.Name = "panelCheckSM";
             this.panelCheckSM.Size = new System.Drawing.Size(247, 156);
             this.panelCheckSM.TabIndex = 3;
@@ -199,11 +222,11 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(15, 92);
+            this.label2.Location = new System.Drawing.Point(15, 250);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(74, 21);
+            this.label2.Size = new System.Drawing.Size(211, 21);
             this.label2.TabIndex = 1;
-            this.label2.Text = "任务列表";
+            this.label2.Text = "任务列表（每5秒刷新一次）";
             // 
             // label3
             // 
@@ -225,21 +248,109 @@
             this.label4.TabIndex = 6;
             this.label4.Text = "满意度选择";
             // 
+            // btnStart
+            // 
+            this.btnStart.Location = new System.Drawing.Point(546, 55);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(59, 26);
+            this.btnStart.TabIndex = 7;
+            this.btnStart.Text = "开始";
+            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            // 
+            // userName
+            // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.userName.DefaultCellStyle = dataGridViewCellStyle1;
+            this.userName.DividerWidth = 1;
+            this.userName.Frozen = true;
+            this.userName.HeaderText = "乘车人";
+            this.userName.Name = "userName";
+            this.userName.ReadOnly = true;
+            this.userName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.userName.Width = 80;
+            // 
+            // travelDate
+            // 
+            this.travelDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.travelDate.DefaultCellStyle = dataGridViewCellStyle2;
+            this.travelDate.DividerWidth = 1;
+            this.travelDate.Frozen = true;
+            this.travelDate.HeaderText = "乘车日期";
+            this.travelDate.Name = "travelDate";
+            this.travelDate.ReadOnly = true;
+            this.travelDate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.travelDate.Width = 80;
+            // 
+            // trainNo
+            // 
+            this.trainNo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.trainNo.DefaultCellStyle = dataGridViewCellStyle3;
+            this.trainNo.DividerWidth = 1;
+            this.trainNo.Frozen = true;
+            this.trainNo.HeaderText = "车次";
+            this.trainNo.Name = "trainNo";
+            this.trainNo.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.trainNo.Width = 60;
+            // 
+            // upBoundStation
+            // 
+            this.upBoundStation.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.upBoundStation.DefaultCellStyle = dataGridViewCellStyle4;
+            this.upBoundStation.DividerWidth = 1;
+            this.upBoundStation.HeaderText = "上车站";
+            this.upBoundStation.Name = "upBoundStation";
+            this.upBoundStation.Width = 80;
+            // 
+            // offBoundStation
+            // 
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.offBoundStation.DefaultCellStyle = dataGridViewCellStyle5;
+            this.offBoundStation.DividerWidth = 1;
+            this.offBoundStation.HeaderText = "下车站";
+            this.offBoundStation.Name = "offBoundStation";
+            this.offBoundStation.Width = 80;
+            // 
+            // status
+            // 
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.status.DefaultCellStyle = dataGridViewCellStyle6;
+            this.status.DividerWidth = 1;
+            this.status.HeaderText = "状态";
+            this.status.Name = "status";
+            this.status.Width = 60;
+            // 
+            // surveyNumber
+            // 
+            this.surveyNumber.DividerWidth = 1;
+            this.surveyNumber.HeaderText = "问卷编号/备注";
+            this.surveyNumber.Name = "surveyNumber";
+            this.surveyNumber.Width = 150;
+            // 
+            // PanelTimer
+            // 
+            this.PanelTimer.Interval = 5000;
+            this.PanelTimer.Tick += new System.EventHandler(this.PanelTimer_Tick);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(697, 446);
+            this.ClientSize = new System.Drawing.Size(697, 487);
+            this.Controls.Add(this.btnStart);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBoxFilePath);
             this.Controls.Add(this.panelCheckSM);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dataGridViewWorkList);
             this.Controls.Add(this.btnBrowse);
             this.Name = "FormMain";
             this.Text = "FormMain";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWorkList)).EndInit();
             this.panelCheckSM.ResumeLayout(false);
             this.panelCheckSM.PerformLayout();
             this.ResumeLayout(false);
@@ -251,7 +362,7 @@
 
         private System.Windows.Forms.Timer DelayTimer;
         private System.Windows.Forms.Button btnBrowse;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridViewWorkList;
         private System.Windows.Forms.Panel panelCheckSM;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBoxFilePath;
@@ -266,5 +377,14 @@
         private System.Windows.Forms.Button btnCheckSMSubmit;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button btnStart;
+        private System.Windows.Forms.DataGridViewTextBoxColumn userName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn travelDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn trainNo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn upBoundStation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn offBoundStation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn status;
+        private System.Windows.Forms.DataGridViewTextBoxColumn surveyNumber;
+        private System.Windows.Forms.Timer PanelTimer;
     }
 }

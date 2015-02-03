@@ -22,7 +22,9 @@ namespace SurveyFiller
     public class SurveyBaseInfo
     {
         public String UserName;
+        public String Province;
         public TrainInfo TravelRecord;
+        public String SurveyStatus;
         public String SurveyNumber;
         public SurveyBaseInfo(String userName, TrainInfo tr)
         {
@@ -31,7 +33,6 @@ namespace SurveyFiller
         }
         public String WrapSurveyBaseInfo()
         {
-            //String info = "{userName:" + this.UserAccount.UserName +",name:" + this.UserAccount.PassengerName + ",id_no:" + this.UserAccount.PassengerIdentityNo + ",contact_no:" + this.UserAccount.Mobile + ",email:" + this.UserAccount.Email + ",datepicker:" + this.TravelRecord.TravelDate + ",board_train_no:" + this.TravelRecord.TravelTrainNumber + ",board_station:" + this.TravelRecord.OnBoardStation + ",down_station:" + this.TravelRecord.OffBoardStation + "}";
             String info = "{userName:" + this.UserName + ",datepicker:" + this.TravelRecord.TravelDate + ",board_train_no:" + this.TravelRecord.TravelTrainNumber + ",board_station:" + this.TravelRecord.OnBoardStation + ",down_station:" + this.TravelRecord.OffBoardStation + "}";
             return info;
         }

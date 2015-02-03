@@ -67,6 +67,7 @@
     <Compile Include="SurveyControl.cs" />
     <Compile Include="ValidationCodeProcessing.cs" />
     <Compile Include="WebControl.cs" />
+    <Compile Include="WorkListIO.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

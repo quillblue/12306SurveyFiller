@@ -13,7 +13,7 @@ namespace SurveyFiller
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMain());
-        //    WebControl wc = WebControl.Instance();
+            WebControl wc = WebControl.Instance();
         //    SurveyControl sc = new SurveyControl();
         //    ValidationCodeProcessing vcp = new ValidationCodeProcessing();
 
