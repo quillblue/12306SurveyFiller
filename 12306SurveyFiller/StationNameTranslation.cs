@@ -38,7 +38,7 @@ namespace SurveyFiller
                 return StationDict[stationName];
             }
             catch(Exception e) {
-                return "#"+stationName;
+                return null;
             }
         }
         public String GetStationName(String telegramCode) {

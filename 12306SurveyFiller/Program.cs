@@ -14,25 +14,8 @@ namespace SurveyFiller
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMain());
             WebControl wc = WebControl.Instance();
-        //    SurveyControl sc = new SurveyControl();
         //    ValidationCodeProcessing vcp = new ValidationCodeProcessing();
 
-        //    Console.WriteLine("请输入待填问卷列表所位于的Excel文件的文件名（目前仅支持Excel 97-2003）,直接敲回车默认为1.xls");
-        //    String FilePath = Console.ReadLine().Trim();
-        //    if (FilePath == "") { FilePath = "1.xls"; }
-        //    String AccountConfigPath = FilePath;
-        //    Console.WriteLine("请选择评价类型：1.全部满意，2.一般评价（输入1或2后回车选择）,直接敲回车默认为全部满意");
-        //    int Option = 0;
-        //    String inputOption = Console.ReadLine().Trim();
-        //    if (inputOption == "2") { Option = 1; }
-
-        //    List<SurveyBaseInfo> WorkList = sc.LoadWorkList(FilePath, AccountConfigPath);
-        //    List<SurveyBaseInfo> SuccessList = new List<SurveyBaseInfo>();
-        //    List<SurveyBaseInfo> FailedList = new List<SurveyBaseInfo>();
-        //    List<String> ResultList = new List<string>();
-
-        //    Console.WriteLine("开始提交问卷...为减少问卷系统-21180的出现，请您在收到短信后稍过几秒再填写验证码。");
-        //    int i = 1;
         //    foreach (SurveyBaseInfo sbi in WorkList)
         //    {
         //        Console.WriteLine("正在提交第" + i + "张问卷");

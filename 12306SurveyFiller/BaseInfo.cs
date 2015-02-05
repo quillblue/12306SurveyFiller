@@ -17,6 +17,11 @@ namespace SurveyFiller
             this.OnBoardStation = onBoardStation;
             this.OffBoardStation = offBoardStation;
         }
+
+        public void TranslateStation(String on, String off){
+            this.OnBoardStation = on;
+            this.OffBoardStation = off;
+        }
     }
 
     public class SurveyBaseInfo
@@ -30,7 +35,17 @@ namespace SurveyFiller
         {
             this.UserName = userName;
             this.TravelRecord = tr;
+            this.SurveyStatus = "等待";
         }
+
+        public SurveyBaseInfo(String userName, TrainInfo tr, String failedReason)
+        {
+            this.UserName = userName;
+            this.TravelRecord = tr;
+            this.SurveyStatus = "失败";
+            this.SurveyNumber = failedReason;
+        }
+
         public String WrapSurveyBaseInfo()
         {
             String info = "{userName:" + this.UserName + ",datepicker:" + this.TravelRecord.TravelDate + ",board_train_no:" + this.TravelRecord.TravelTrainNumber + ",board_station:" + this.TravelRecord.OnBoardStation + ",down_station:" + this.TravelRecord.OffBoardStation + "}";

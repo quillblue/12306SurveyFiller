@@ -10,15 +10,19 @@ namespace SurveyFiller
     public class SurveyControl
     {
         WebControl wc = WebControl.Instance();
+        StationNameTranslation snt = new StationNameTranslation();
+        
+        public SurveyControl()
+        {
+            //Load station dictionary
+            snt.LoadDict();
+        }
 
         public List<SurveyBaseInfo> LoadWorkList(string filePath)
         {
             List<SurveyBaseInfo> Worklist = new List<SurveyBaseInfo>();
             DataSet ul = new DataSet();
 
-            //Load station dictionary
-            StationNameTranslation snt = new StationNameTranslation();
-            snt.LoadDict();
             //Prepare for connection to Excel
             DataSet workListDataset = new DataSet();
             try
@@ -31,28 +35,31 @@ namespace SurveyFiller
                 OleDbDataAdapter objAdapter = new OleDbDataAdapter();
                 objAdapter.SelectCommand = objCmdSelect;
                 objAdapter.Fill(workListDataset);
-                for (int i = 0; i < workListDataset.Tables[0].Rows.Count; i++) {
-                    DataRow dr=workListDataset.Tables[0].Rows[i];
+                for (int i = 0; i < workListDataset.Tables[0].Rows.Count; i++)
+                {
+                    DataRow dr = workListDataset.Tables[0].Rows[i];
                     try
                     {
                         if (dr["乘车日期"].ToString() != "")
                         {
-                            TrainInfo ti = new TrainInfo(Convert.ToDateTime(dr["乘车日期"]).ToString("yyyy-MM-dd").Substring(0, 10), dr["所乘车次"].ToString(), snt.GetTelegramCode(dr["票面乘车站"].ToString()), snt.GetTelegramCode(dr["票面下车站"].ToString()));
+                            TrainInfo ti = new TrainInfo(Convert.ToDateTime(dr["乘车日期"]).ToString("yyyy-MM-dd").Substring(0, 10), dr["所乘车次"].ToString(), dr["票面乘车站"].ToString(), dr["票面下车站"].ToString());
                             String username = dr["用户名"].ToString();
                             Worklist.Add(new SurveyBaseInfo(username, ti));
                         }
                     }
-                    catch (Exception e) {
-                        Console.WriteLine("识别第" + (i + 1) + "行失败，错误原因"+e.ToString());
+                    catch (Exception e)
+                    {
                         String username = "###";
                         TrainInfo ti = new TrainInfo("###", "###", "###", "###");
-                        Worklist.Add(new SurveyBaseInfo(username, ti));
+                        Worklist.Add(new SurveyBaseInfo(username, ti, "无法识别，" + e.ToString()));
                     }
-                    
+
                 }
             }
-            catch (Exception e) {
-                Console.WriteLine("读取Excel文件失败，错误原因" + e.ToString());
+            catch (Exception e)
+            {
+
+                //UpdateWorkingStatus("读取Excel文件失败，错误原因" + e.ToString(), 2);
             }
 
             return Worklist;
@@ -64,24 +71,26 @@ namespace SurveyFiller
             StationNameTranslation snt = new StationNameTranslation();
             snt.LoadDict();
             DateTime CurrentTime = DateTime.Now;
-            String Filename = CurrentTime.ToString("yyyy-MM-dd HHmmss") +".txt";
+            String Filename = CurrentTime.ToString("yyyy-MM-dd HHmmss") + ".txt";
             FileStream fs = new FileStream(Filename, FileMode.Create);
             StreamWriter sw = new StreamWriter(fs, Encoding.GetEncoding("gb2312"));
-            sw.WriteLine("报告打印时间："+CurrentTime.ToString());
+            sw.WriteLine("报告打印时间：" + CurrentTime.ToString());
             sw.WriteLine("总条目：" + resultList.Count + "  成功" + successList.Count + "条，失败" + failedList.Count + "条");
             sw.WriteLine("");
             sw.WriteLine("1.问卷填写结果(按Excel中顺序每条一行，成功条目显示问卷号，失败条目显示失败原因)");
             sw.WriteLine("");
-            foreach (String i in resultList) {
-                    sw.WriteLine(i);
+            foreach (String i in resultList)
+            {
+                sw.WriteLine(i);
             }
             sw.WriteLine("");
             sw.WriteLine("===================");
             sw.WriteLine("2.填写成功的问卷列表(可直接复制到Excel)");
             sw.WriteLine("");
             sw.WriteLine("乘车人用户名\t乘车日期\t所乘车次\t票面乘车站\t票面下车站\t问卷编号");
-            foreach (SurveyBaseInfo sbi in successList) {
-                sw.WriteLine(sbi.UserName+"\t"+sbi.TravelRecord.TravelDate + "\t" + sbi.TravelRecord.TravelTrainNumber + "\t" + snt.GetStationName(sbi.TravelRecord.OnBoardStation) + "\t" + snt.GetStationName(sbi.TravelRecord.OffBoardStation)+"\t"+sbi.SurveyNumber);
+            foreach (SurveyBaseInfo sbi in successList)
+            {
+                sw.WriteLine(sbi.UserName + "\t" + sbi.TravelRecord.TravelDate + "\t" + sbi.TravelRecord.TravelTrainNumber + "\t" + snt.GetStationName(sbi.TravelRecord.OnBoardStation) + "\t" + snt.GetStationName(sbi.TravelRecord.OffBoardStation) + "\t" + sbi.SurveyNumber);
             }
 
             sw.WriteLine("");
@@ -91,7 +100,7 @@ namespace SurveyFiller
             sw.WriteLine("乘车人用户名\t乘车日期\t所乘车次\t票面乘车站\t票面下车站\t失败原因");
             foreach (SurveyBaseInfo sbi in failedList)
             {
-                sw.WriteLine(sbi.UserName+"\t"+sbi.TravelRecord.TravelDate + "\t" + sbi.TravelRecord.TravelTrainNumber + "\t" + snt.GetStationName(sbi.TravelRecord.OnBoardStation) + "\t" + snt.GetStationName(sbi.TravelRecord.OffBoardStation) + "\t" + sbi.SurveyNumber);
+                sw.WriteLine(sbi.UserName + "\t" + sbi.TravelRecord.TravelDate + "\t" + sbi.TravelRecord.TravelTrainNumber + "\t" + snt.GetStationName(sbi.TravelRecord.OnBoardStation) + "\t" + snt.GetStationName(sbi.TravelRecord.OffBoardStation) + "\t" + sbi.SurveyNumber);
             }
 
             sw.Close();
@@ -101,14 +110,15 @@ namespace SurveyFiller
 
         public String FillSurvey(SurveyBaseInfo sbi, int option)
         {
-            if (sbi.TravelRecord.OnBoardStation[0] == '#')
+            if (snt.GetTelegramCode(sbi.TravelRecord.OnBoardStation) == null)
             {
-                return "0#票面乘车站" + sbi.TravelRecord.OnBoardStation.Substring(1) + "未能被翻译为电报码，请检查站名是否准确\n";
+                return "票面上车站" + sbi.TravelRecord.OnBoardStation + "未能被翻译为电报码，请检查\n";
             }
-            if (sbi.TravelRecord.OffBoardStation[0] == '#')
+            if (snt.GetTelegramCode(sbi.TravelRecord.OffBoardStation) == null)
             {
-                return "0#票面下车站" + sbi.TravelRecord.OffBoardStation.Substring(1) + "未能被翻译为电报码，请检查站名是否准确\n";
+                return "票面下车站" + sbi.TravelRecord.OffBoardStation + "未能被翻译为电报码，请检查\n";
             }
+            sbi.TravelRecord.TranslateStation(snt.GetTelegramCode(sbi.TravelRecord.OnBoardStation),snt.GetTelegramCode(sbi.TravelRecord.OffBoardStation));
             String passengerInfoAnswer = sbi.WrapSurveyBaseInfo();
             String questionRadioAnswer = "";
             if (option == 0)
