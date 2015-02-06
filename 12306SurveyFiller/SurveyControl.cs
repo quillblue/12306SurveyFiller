@@ -11,7 +11,7 @@ namespace SurveyFiller
     {
         WebControl wc = WebControl.Instance();
         StationNameTranslation snt = new StationNameTranslation();
-        
+
         public SurveyControl()
         {
             //Load station dictionary
@@ -58,10 +58,7 @@ namespace SurveyFiller
             }
             catch (Exception e)
             {
-
-                //UpdateWorkingStatus("读取Excel文件失败，错误原因" + e.ToString(), 2);
             }
-
             return Worklist;
         }
 
@@ -118,7 +115,7 @@ namespace SurveyFiller
             {
                 return "票面下车站" + sbi.TravelRecord.OffBoardStation + "未能被翻译为电报码，请检查\n";
             }
-            sbi.TravelRecord.TranslateStation(snt.GetTelegramCode(sbi.TravelRecord.OnBoardStation),snt.GetTelegramCode(sbi.TravelRecord.OffBoardStation));
+            sbi.TravelRecord.TranslateStation(snt.GetTelegramCode(sbi.TravelRecord.OnBoardStation), snt.GetTelegramCode(sbi.TravelRecord.OffBoardStation));
             String passengerInfoAnswer = sbi.WrapSurveyBaseInfo();
             String questionRadioAnswer = "";
             if (option == 0)
