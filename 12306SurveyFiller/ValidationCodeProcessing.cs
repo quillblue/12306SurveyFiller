@@ -44,11 +44,19 @@ namespace SurveyFiller
             }
         }
 
+        public String SendValidationRequest(string userName, string seq_result, string vcInput)
+        {
+            String result = "";
+            result = SendValidationCode(userName, seq_result, vcInput);
+            return (result == "ok") ? "ok" : ErrorCodeTranslation(result);
+        }
+
         private String SendValidationCode(String userName, String seq_no, String validationCode)
         {
             String PostData = "userName=" + userName + "&vc=" + validationCode + "&seq_no=" + seq_no;
             String response = wc.PostHttpRequest("http://dynamic.12306.cn/surweb/registAction.do?method=checkVc", PostData);
             String ResultCode = "";
+            String ResultData = "";
             JsonReader reader = new JsonTextReader(new StringReader(response));
             try
             {
@@ -58,8 +66,12 @@ namespace SurveyFiller
                     {
                         ResultCode = reader.Value.ToString();
                     }
+                    if (reader.Path == "resultData")
+                    {
+                        ResultData = reader.Value.ToString();
+                    }
                 }
-                return ResultCode;
+                return ResultCode=="busFail"?ResultData:ResultCode;
             }
             catch (Exception e)
             {
@@ -73,58 +85,12 @@ namespace SurveyFiller
             switch (errorCode)
             {
                 case "fail": translation = "当前用户过多或验证码输入错误"; break;
-                case "busFail": translation = "busFail"; break;
                 case "uName_error": translation = "用户名不正确"; break;
                 case "session_timeout": translation = "当前验证码已过期"; break;
                 case "system_unknownError": translation = "问卷系统异常"; break;
-                default: translation = "验证过程中出现未知错误," + errorCode; break;
+                default: translation = errorCode+"（或由系统抽风所致，仅供参考）"; break;
             }
             return translation;
         }
-
-        //private String SendSMSRequest(string userName)
-        //{
-        //    String seq_result = "";
-        //    for (int i = 0; i < 20 && (seq_result.Length != 4); i++)
-        //    {
-        //        seq_result = FetchValidationCode(userName);
-        //    }
-        //    if (seq_result.Length != 4)
-        //    {
-        //        return ErrorCodeTranslation(seq_result);
-        //    }
-        //    return seq_result;
-        //}
-
-        private String SendValidationRequest(string userName, string seq_result, string vcInput)
-        {
-            String result = "";
-            for (int i = 0; i < 20 && (result != "ok"); i++)
-            {
-                result = SendValidationCode(userName, seq_result, vcInput);
-            }
-            return (result == "ok") ? "ok" : ErrorCodeTranslation(result);
-        }
-
-        //public String Validation(string userName)
-        //{
-        //    String fetchResult = SendSMSRequest(userName);
-        //    if (fetchResult.Contains("#"))
-        //    {
-        //        return fetchResult;
-        //    }
-        //    String sendResult = "";
-        //    for (int chanceLeft = 3; chanceLeft > 0; chanceLeft--)
-        //    {
-        //        String vcInput = Console.ReadLine();
-        //        sendResult = SendValidationRequest(userName, fetchResult, vcInput);
-        //        if (sendResult == "0#busFail")
-        //        {
-        //            Console.WriteLine("验证码输入错误或问卷系统抽风，请再次输入你所手到的验证码。你还有" + (chanceLeft - 1) + "次机会。");
-        //        }
-        //        else { return sendResult; }
-        //    }
-        //    return "0#验证码输入错误或问卷系统抽风";
-        //}
     }
 }

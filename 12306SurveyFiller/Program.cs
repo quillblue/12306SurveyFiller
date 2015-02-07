@@ -14,18 +14,6 @@ namespace SurveyFiller
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMain());
             
-        //        {
-        //            String validate = vcp.Validation(sbi.UserName);
-        //            String response = "";
-        //            if (validate != "ok")
-        //            {
-        //                response = validate;
-        //            }
-        //            else
-        //            {
-        //                response = sc.FillSurvey(sbi, Option);
-        //            }
-
         //            if (response[0] == '0')
         //            {
         //                Console.WriteLine("提交第" + i + "张问卷失败，失败原因：" + response.Substring(2));

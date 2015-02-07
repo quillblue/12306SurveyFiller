@@ -37,7 +37,7 @@ namespace SurveyFiller
             if (workLoad.Count == 0) { ReadWorkLoad(); }
             LockConfigPanel();
             int i = 1;
-            Boolean smChecked = false;
+            int opinion = radioButtonAllGood.Checked ? 0 : 1;
             foreach (SurveyBaseInfo sbi in workLoad)
             {
                 if (sbi.SurveyStatus == "等待" || sbi.SurveyNumber.Contains("重试"))
@@ -45,26 +45,34 @@ namespace SurveyFiller
                     UpdateWorkingStatus("【第" + i + "张问卷】正在进行短信验证");
 
                     String fetchResult = FetchValidationCode(sbi.UserName);
-                    if (fetchResult != "")
+                    if (fetchResult.Length != 4)
                     {
-                        sbi.SurveyStatus = "失败";
-                        sbi.SurveyNumber = fetchResult;
-                        this.Update();
+                        sbi.UpdateStatus("失败", fetchResult);
+                        UpdateWorkLoadPanel();
+                        UpdateWorkingStatus("【第" + i + "张问卷】短信验证失败",2);
                     }
                     else
                     {
-                        FormSMCheck fsmc = new FormSMCheck();
+                        FormSMCheck fsmc = new FormSMCheck(sbi.UserName,fetchResult);
                         fsmc.ShowDialog();
-                        while (!smChecked)
+                        if (fsmc.DialogResult == DialogResult.Cancel)
                         {
-                            
+                            sbi.UpdateStatus("失败", "用户中断了操作[可重试]");
+                            UpdateWorkLoadPanel();
+                            UpdateWorkingStatus("【第" + i + "张问卷】用户中断操作", 2);
                         }
-                        smChecked = false;
-                        //do submitting
+                        else 
+                        {
+                            sbi.UpdateStatus("成功", "等待提交");
+                            UpdateWorkLoadPanel();
+                            String response = sc.FillSurvey(sbi, opinion);
+                            //do sth after submitting
+                        }
                     }
-
                 }
+                i++;
             }
+            UnlockConfigPanel();
         }
 
         private void PanelTimer_Tick(object sender, EventArgs e)
@@ -106,6 +114,13 @@ namespace SurveyFiller
                 String[] row = { sbi.UserName, sbi.TravelRecord.TravelDate, sbi.TravelRecord.TravelTrainNumber, sbi.TravelRecord.OnBoardStation, sbi.TravelRecord.OffBoardStation, sbi.SurveyStatus, sbi.SurveyNumber };
                 dataGridViewWorkList.Rows.Add(row);
             }
+            for(int i=0;i<dataGridViewWorkList.Rows.Count;i++){
+                switch (dataGridViewWorkList.Rows[i].Cells[5].Value.ToString()) {
+                    case "失败": dataGridViewWorkList.Rows[i].DefaultCellStyle.BackColor = Color.LightCoral; break;
+                    case "成功": dataGridViewWorkList.Rows[i].DefaultCellStyle.BackColor = Color.LightGreen; break;
+                }
+                
+            }
             this.Update();
         }
 
@@ -124,9 +139,8 @@ namespace SurveyFiller
                 {
                     if (fetchedSeqNo.Contains("重试"))
                     {
-                        //labelSMCheckErrorText.Text = "短信发送频率超过限制，将在30秒后重试";
+                        UpdateWorkingStatus("短信发送频率超过限制，将在30秒后重试",2);
                         System.Threading.Thread.Sleep(30000);
-                        //labelSMCheckErrorText.Text = "";
                     }
                     else
                     {
@@ -134,7 +148,7 @@ namespace SurveyFiller
                     }
                 }
             }
-            return "";
+            return fetchedSeqNo;
         }
 
         private void ReadWorkLoad()
@@ -148,8 +162,7 @@ namespace SurveyFiller
                 return;
             }
             UpdateWorkingStatus("Excel读取完成", 1);
-            UpdateWorkLoadPanel();
-            int opinion = radioButtonAllGood.Checked ? 0 : 1;
+            UpdateWorkLoadPanel();            
         }
 
     }
