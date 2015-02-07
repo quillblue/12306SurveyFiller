@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.dataGridViewWorkList = new System.Windows.Forms.DataGridView();
             this.userName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -44,16 +44,6 @@
             this.offBoundStation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.surveyNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.panelCheckSM = new System.Windows.Forms.Panel();
-            this.label8 = new System.Windows.Forms.Label();
-            this.btnCheckSMSubmit = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.labelSMCheckSeq = new System.Windows.Forms.Label();
-            this.labelSMCheckUserName = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.textBoxFilePath = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -67,13 +57,10 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
-            this.btnRetry = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
             this.textBoxStatus = new System.Windows.Forms.TextBox();
             this.panelConfig = new System.Windows.Forms.Panel();
-            this.labelSMCheckErrorText = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWorkList)).BeginInit();
-            this.panelCheckSM.SuspendLayout();
             this.panelConfig.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -101,7 +88,7 @@
             this.offBoundStation,
             this.status,
             this.surveyNumber});
-            this.dataGridViewWorkList.Location = new System.Drawing.Point(19, 274);
+            this.dataGridViewWorkList.Location = new System.Drawing.Point(19, 267);
             this.dataGridViewWorkList.Name = "dataGridViewWorkList";
             this.dataGridViewWorkList.RowTemplate.Height = 23;
             this.dataGridViewWorkList.Size = new System.Drawing.Size(633, 199);
@@ -109,8 +96,8 @@
             // 
             // userName
             // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.userName.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.userName.DefaultCellStyle = dataGridViewCellStyle1;
             this.userName.DividerWidth = 1;
             this.userName.Frozen = true;
             this.userName.HeaderText = "乘车人";
@@ -122,8 +109,8 @@
             // travelDate
             // 
             this.travelDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.travelDate.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.travelDate.DefaultCellStyle = dataGridViewCellStyle2;
             this.travelDate.DividerWidth = 1;
             this.travelDate.Frozen = true;
             this.travelDate.HeaderText = "乘车日期";
@@ -135,8 +122,8 @@
             // trainNo
             // 
             this.trainNo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.trainNo.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.trainNo.DefaultCellStyle = dataGridViewCellStyle3;
             this.trainNo.DividerWidth = 1;
             this.trainNo.Frozen = true;
             this.trainNo.HeaderText = "车次";
@@ -147,8 +134,8 @@
             // upBoundStation
             // 
             this.upBoundStation.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.upBoundStation.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.upBoundStation.DefaultCellStyle = dataGridViewCellStyle4;
             this.upBoundStation.DividerWidth = 1;
             this.upBoundStation.HeaderText = "上车站";
             this.upBoundStation.Name = "upBoundStation";
@@ -156,8 +143,8 @@
             // 
             // offBoundStation
             // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.offBoundStation.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.offBoundStation.DefaultCellStyle = dataGridViewCellStyle5;
             this.offBoundStation.DividerWidth = 1;
             this.offBoundStation.HeaderText = "下车站";
             this.offBoundStation.Name = "offBoundStation";
@@ -165,8 +152,8 @@
             // 
             // status
             // 
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.status.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.status.DefaultCellStyle = dataGridViewCellStyle6;
             this.status.DividerWidth = 1;
             this.status.HeaderText = "状态";
             this.status.Name = "status";
@@ -179,121 +166,12 @@
             this.surveyNumber.Name = "surveyNumber";
             this.surveyNumber.Width = 150;
             // 
-            // panelCheckSM
-            // 
-            this.panelCheckSM.BackColor = System.Drawing.Color.LightGray;
-            this.panelCheckSM.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panelCheckSM.Controls.Add(this.labelSMCheckErrorText);
-            this.panelCheckSM.Controls.Add(this.label8);
-            this.panelCheckSM.Controls.Add(this.btnCheckSMSubmit);
-            this.panelCheckSM.Controls.Add(this.textBox1);
-            this.panelCheckSM.Controls.Add(this.label7);
-            this.panelCheckSM.Controls.Add(this.labelSMCheckSeq);
-            this.panelCheckSM.Controls.Add(this.labelSMCheckUserName);
-            this.panelCheckSM.Controls.Add(this.label6);
-            this.panelCheckSM.Controls.Add(this.label5);
-            this.panelCheckSM.Controls.Add(this.label1);
-            this.panelCheckSM.Enabled = false;
-            this.panelCheckSM.Location = new System.Drawing.Point(133, 128);
-            this.panelCheckSM.Name = "panelCheckSM";
-            this.panelCheckSM.Size = new System.Drawing.Size(459, 96);
-            this.panelCheckSM.TabIndex = 3;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label8.ForeColor = System.Drawing.Color.MediumBlue;
-            this.label8.Location = new System.Drawing.Point(3, 7);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(74, 22);
-            this.label8.TabIndex = 7;
-            this.label8.Text = "短信验证";
-            // 
-            // btnCheckSMSubmit
-            // 
-            this.btnCheckSMSubmit.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnCheckSMSubmit.Location = new System.Drawing.Point(176, 61);
-            this.btnCheckSMSubmit.Name = "btnCheckSMSubmit";
-            this.btnCheckSMSubmit.Size = new System.Drawing.Size(52, 25);
-            this.btnCheckSMSubmit.TabIndex = 7;
-            this.btnCheckSMSubmit.Text = "确定";
-            this.btnCheckSMSubmit.UseVisualStyleBackColor = true;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(97, 60);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(68, 26);
-            this.textBox1.TabIndex = 6;
-            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.Location = new System.Drawing.Point(3, 61);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(90, 21);
-            this.label7.TabIndex = 5;
-            this.label7.Text = "短信验证码";
-            // 
-            // labelSMCheckSeq
-            // 
-            this.labelSMCheckSeq.AutoSize = true;
-            this.labelSMCheckSeq.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelSMCheckSeq.ForeColor = System.Drawing.Color.MediumBlue;
-            this.labelSMCheckSeq.Location = new System.Drawing.Point(263, 38);
-            this.labelSMCheckSeq.Name = "labelSMCheckSeq";
-            this.labelSMCheckSeq.Size = new System.Drawing.Size(0, 17);
-            this.labelSMCheckSeq.TabIndex = 4;
-            // 
-            // labelSMCheckUserName
-            // 
-            this.labelSMCheckUserName.AutoSize = true;
-            this.labelSMCheckUserName.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelSMCheckUserName.ForeColor = System.Drawing.Color.MediumBlue;
-            this.labelSMCheckUserName.Location = new System.Drawing.Point(94, 38);
-            this.labelSMCheckUserName.Name = "labelSMCheckUserName";
-            this.labelSMCheckUserName.Size = new System.Drawing.Size(0, 17);
-            this.labelSMCheckUserName.TabIndex = 3;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(173, 38);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(92, 17);
-            this.label6.TabIndex = 2;
-            this.label6.Text = "验证码序列号：";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label5.Location = new System.Drawing.Point(4, 38);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(92, 17);
-            this.label5.TabIndex = 1;
-            this.label5.Text = "乘车人用户名：";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(83, 12);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(238, 17);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "请在15分钟内输入相应手机上收到的验证码";
-            // 
             // textBoxFilePath
             // 
             this.textBoxFilePath.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxFilePath.Location = new System.Drawing.Point(121, 15);
             this.textBoxFilePath.Name = "textBoxFilePath";
+            this.textBoxFilePath.ReadOnly = true;
             this.textBoxFilePath.Size = new System.Drawing.Size(392, 22);
             this.textBoxFilePath.TabIndex = 4;
             // 
@@ -301,7 +179,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(15, 250);
+            this.label2.Location = new System.Drawing.Point(15, 243);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(211, 21);
             this.label2.TabIndex = 1;
@@ -313,9 +191,9 @@
             this.label3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label3.Location = new System.Drawing.Point(3, 17);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(112, 21);
+            this.label3.Size = new System.Drawing.Size(80, 21);
             this.label3.TabIndex = 5;
-            this.label3.Text = "Excel文件路径";
+            this.label3.Text = "Excel文件";
             // 
             // label4
             // 
@@ -330,7 +208,7 @@
             // btnStart
             // 
             this.btnStart.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnStart.Location = new System.Drawing.Point(19, 99);
+            this.btnStart.Location = new System.Drawing.Point(19, 142);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(85, 37);
             this.btnStart.TabIndex = 7;
@@ -340,6 +218,7 @@
             // 
             // PanelTimer
             // 
+            this.PanelTimer.Enabled = true;
             this.PanelTimer.Interval = 5000;
             this.PanelTimer.Tick += new System.EventHandler(this.PanelTimer_Tick);
             // 
@@ -417,21 +296,10 @@
             this.textBox3.Text = "上海";
             this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // btnRetry
-            // 
-            this.btnRetry.Enabled = false;
-            this.btnRetry.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnRetry.Location = new System.Drawing.Point(20, 142);
-            this.btnRetry.Name = "btnRetry";
-            this.btnRetry.Size = new System.Drawing.Size(85, 37);
-            this.btnRetry.TabIndex = 15;
-            this.btnRetry.Text = "重试";
-            this.btnRetry.UseVisualStyleBackColor = true;
-            // 
             // btnExport
             // 
             this.btnExport.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnExport.Location = new System.Drawing.Point(20, 185);
+            this.btnExport.Location = new System.Drawing.Point(19, 185);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(85, 37);
             this.btnExport.TabIndex = 16;
@@ -468,36 +336,21 @@
             this.panelConfig.Size = new System.Drawing.Size(609, 78);
             this.panelConfig.TabIndex = 18;
             // 
-            // labelSMCheckErrorText
-            // 
-            this.labelSMCheckErrorText.AutoSize = true;
-            this.labelSMCheckErrorText.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelSMCheckErrorText.ForeColor = System.Drawing.Color.Red;
-            this.labelSMCheckErrorText.Location = new System.Drawing.Point(231, 65);
-            this.labelSMCheckErrorText.Name = "labelSMCheckErrorText";
-            this.labelSMCheckErrorText.Size = new System.Drawing.Size(226, 17);
-            this.labelSMCheckErrorText.TabIndex = 8;
-            this.labelSMCheckErrorText.Text = "短信发送频率超过限制，将在30秒后重试";
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(670, 492);
+            this.ClientSize = new System.Drawing.Size(670, 480);
             this.Controls.Add(this.panelConfig);
             this.Controls.Add(this.textBoxStatus);
             this.Controls.Add(this.btnExport);
-            this.Controls.Add(this.btnRetry);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.panelCheckSM);
             this.Controls.Add(this.dataGridViewWorkList);
             this.Name = "FormMain";
             this.Text = "FormMain";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWorkList)).EndInit();
-            this.panelCheckSM.ResumeLayout(false);
-            this.panelCheckSM.PerformLayout();
             this.panelConfig.ResumeLayout(false);
             this.panelConfig.PerformLayout();
             this.ResumeLayout(false);
@@ -509,20 +362,10 @@
 
         private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.DataGridView dataGridViewWorkList;
-        private System.Windows.Forms.Panel panelCheckSM;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBoxFilePath;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label labelSMCheckUserName;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label labelSMCheckSeq;
-        private System.Windows.Forms.Button btnCheckSMSubmit;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.DataGridViewTextBoxColumn userName;
         private System.Windows.Forms.DataGridViewTextBoxColumn travelDate;
@@ -539,10 +382,8 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Button btnRetry;
         private System.Windows.Forms.Button btnExport;
         private System.Windows.Forms.TextBox textBoxStatus;
         private System.Windows.Forms.Panel panelConfig;
-        private System.Windows.Forms.Label labelSMCheckErrorText;
     }
 }

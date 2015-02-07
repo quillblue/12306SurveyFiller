@@ -34,7 +34,7 @@ namespace SurveyFiller
                 if (ResultCode == "ok") { return Seq_No; }
                 else
                 {
-                    if (ResultCode == "busFail") { return "请求验证码的频率达到设定上限"; }
+                    if (ResultCode == "busFail") { return "请求验证码的频率达到设定上限,待重试"; }
                     else { return ErrorCodeTranslation(ResultCode); }
                 }
             }
@@ -82,19 +82,19 @@ namespace SurveyFiller
             return translation;
         }
 
-        private String SendSMSRequest(string userName)
-        {
-            String seq_result = "";
-            for (int i = 0; i < 20 && (seq_result.Length != 4); i++)
-            {
-                seq_result = FetchValidationCode(userName);
-            }
-            if (seq_result.Length != 4)
-            {
-                return ErrorCodeTranslation(seq_result);
-            }
-            return seq_result;
-        }
+        //private String SendSMSRequest(string userName)
+        //{
+        //    String seq_result = "";
+        //    for (int i = 0; i < 20 && (seq_result.Length != 4); i++)
+        //    {
+        //        seq_result = FetchValidationCode(userName);
+        //    }
+        //    if (seq_result.Length != 4)
+        //    {
+        //        return ErrorCodeTranslation(seq_result);
+        //    }
+        //    return seq_result;
+        //}
 
         private String SendValidationRequest(string userName, string seq_result, string vcInput)
         {
@@ -106,25 +106,25 @@ namespace SurveyFiller
             return (result == "ok") ? "ok" : ErrorCodeTranslation(result);
         }
 
-        public String Validation(string userName)
-        {
-            String fetchResult = SendSMSRequest(userName);
-            if (fetchResult.Contains("#"))
-            {
-                return fetchResult;
-            }
-            String sendResult = "";
-            for (int chanceLeft = 3; chanceLeft > 0; chanceLeft--)
-            {
-                String vcInput = Console.ReadLine();
-                sendResult = SendValidationRequest(userName, fetchResult, vcInput);
-                if (sendResult == "0#busFail")
-                {
-                    Console.WriteLine("验证码输入错误或问卷系统抽风，请再次输入你所手到的验证码。你还有" + (chanceLeft - 1) + "次机会。");
-                }
-                else { return sendResult; }
-            }
-            return "0#验证码输入错误或问卷系统抽风";
-        }
+        //public String Validation(string userName)
+        //{
+        //    String fetchResult = SendSMSRequest(userName);
+        //    if (fetchResult.Contains("#"))
+        //    {
+        //        return fetchResult;
+        //    }
+        //    String sendResult = "";
+        //    for (int chanceLeft = 3; chanceLeft > 0; chanceLeft--)
+        //    {
+        //        String vcInput = Console.ReadLine();
+        //        sendResult = SendValidationRequest(userName, fetchResult, vcInput);
+        //        if (sendResult == "0#busFail")
+        //        {
+        //            Console.WriteLine("验证码输入错误或问卷系统抽风，请再次输入你所手到的验证码。你还有" + (chanceLeft - 1) + "次机会。");
+        //        }
+        //        else { return sendResult; }
+        //    }
+        //    return "0#验证码输入错误或问卷系统抽风";
+        //}
     }
 }

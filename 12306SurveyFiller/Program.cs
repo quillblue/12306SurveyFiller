@@ -42,8 +42,6 @@ namespace SurveyFiller
         //            }
 
         //    String OutputFileName = sc.Output(SuccessList, FailedList, ResultList);
-        //    Console.WriteLine("程序运行完成，请到程序目录下查看名为\"" + OutputFileName + "\"的输出文件，按任意键退出程序");
-        //    Console.ReadLine();
         }
     }
 }
