@@ -13,10 +13,6 @@ namespace SurveyFiller
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMain());
-
-            
-
-        //    String OutputFileName = sc.Output(SuccessList, FailedList, ResultList);
         }
     }
 }

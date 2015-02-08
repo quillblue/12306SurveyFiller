@@ -100,7 +100,22 @@ namespace SurveyFiller
 
         private void btnExport_Click(object sender, EventArgs e)
         {
-
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "文本文件|*.txt|所有文件|*.*";
+            sfd.FilterIndex = 1;
+            sfd.FileName = "问卷填写报告" + DateTime.Now.ToString("yyyyMMddHHmmss");
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                String saveResult = sc.Output(workLoad, sfd.FileName);
+                if (saveResult == "")
+                {
+                    UpdateWorkingStatus("导出成功", 1);
+                }
+                else
+                {
+                    UpdateWorkingStatus("导出失败：" + saveResult, 2);
+                }
+            }
         }
         #endregion
 
