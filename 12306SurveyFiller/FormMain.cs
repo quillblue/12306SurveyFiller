@@ -21,6 +21,7 @@ namespace SurveyFiller
             InitializeComponent();
         }
 
+        #region ButtonsClickResponse
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -38,10 +39,21 @@ namespace SurveyFiller
             LockConfigPanel();
             int i = 1;
             int opinion = radioButtonAllGood.Checked ? 0 : 1;
+            String province = textBoxProvince.Text + "/" + textBoxCity.Text;
+            foreach (SurveyBaseInfo sbi in workLoad)
+            {
+                if (sbi.SurveyNumber.Contains("重试"))
+                {
+                    sbi.UpdateStatus("等待", "");
+                }
+            }
+            UpdateWorkLoadPanel();
             foreach (SurveyBaseInfo sbi in workLoad)
             {
                 if (sbi.SurveyStatus == "等待" || sbi.SurveyNumber.Contains("重试"))
                 {
+                    sbi.UpdateStatus("进行中", "");
+                    UpdateWorkLoadPanel();
                     UpdateWorkingStatus("【第" + i + "张问卷】正在进行短信验证");
 
                     String fetchResult = FetchValidationCode(sbi.UserName);
@@ -49,37 +61,50 @@ namespace SurveyFiller
                     {
                         sbi.UpdateStatus("失败", fetchResult);
                         UpdateWorkLoadPanel();
-                        UpdateWorkingStatus("【第" + i + "张问卷】短信验证失败",2);
+                        UpdateWorkingStatus("【第" + i + "张问卷】短信验证失败", 2);
                     }
                     else
                     {
-                        FormSMCheck fsmc = new FormSMCheck(sbi.UserName,fetchResult);
+                        FormSMCheck fsmc = new FormSMCheck(sbi.UserName, fetchResult);
                         fsmc.ShowDialog();
                         if (fsmc.DialogResult == DialogResult.Cancel)
                         {
-                            sbi.UpdateStatus("失败", "用户中断了操作[可重试]");
+                            sbi.UpdateStatus("失败", "[可重试]用户中断了操作");
                             UpdateWorkLoadPanel();
                             UpdateWorkingStatus("【第" + i + "张问卷】用户中断操作", 2);
                         }
-                        else 
+                        else
                         {
-                            sbi.UpdateStatus("成功", "等待提交");
-                            UpdateWorkLoadPanel();
-                            String response = sc.FillSurvey(sbi, opinion);
-                            //do sth after submitting
+                            UpdateWorkingStatus("【第" + i + "张问卷】正在提交");
+                            String response = sc.FillSurvey(sbi, opinion, province);
+                            if (response[0] == 'E')
+                            {
+                                UpdateWorkingStatus("提交第" + i + "张问卷失败，失败原因：" + response.Substring(1), 2);
+                                sbi.UpdateStatus("失败", response.Substring(1));
+                                UpdateWorkLoadPanel();
+                            }
+                            else
+                            {
+                                UpdateWorkingStatus("提交第" + i + "张问卷成功", 1);
+                                sbi.UpdateStatus("成功", response.Substring(1));
+                                UpdateWorkLoadPanel();
+                            }
                         }
                     }
                 }
                 i++;
             }
             UnlockConfigPanel();
+            UpdateWorkingStatus("全部处理完毕，若存在标有[可重试]的失败条目，可再次点击开始|重试按钮重试");
         }
 
-        private void PanelTimer_Tick(object sender, EventArgs e)
+        private void btnExport_Click(object sender, EventArgs e)
         {
-            UpdateWorkLoadPanel();
-        }
 
+        }
+        #endregion
+
+        #region LockAndUnlockCanvas
         private void LockConfigPanel()
         {
             panelConfig.Enabled = false;
@@ -93,7 +118,9 @@ namespace SurveyFiller
             btnStart.Enabled = true;
             btnExport.Enabled = true;
         }
+        #endregion
 
+        #region CanvasDrawing
         private void UpdateWorkingStatus(String text, int statusMode = 0)
         {
             textBoxStatus.Text = text;
@@ -111,19 +138,25 @@ namespace SurveyFiller
             dataGridViewWorkList.Rows.Clear();
             foreach (SurveyBaseInfo sbi in workLoad)
             {
-                String[] row = { sbi.UserName, sbi.TravelRecord.TravelDate, sbi.TravelRecord.TravelTrainNumber, sbi.TravelRecord.OnBoardStation, sbi.TravelRecord.OffBoardStation, sbi.SurveyStatus, sbi.SurveyNumber };
+                String[] row = { sbi.UserName, sbi.TravelRecord.TravelDate, sbi.TravelRecord.TravelTrainNumber, sbi.TravelRecord.OnBoardStationDisplay, sbi.TravelRecord.OffBoardStationDisplay, sbi.SurveyStatus, sbi.SurveyNumber };
                 dataGridViewWorkList.Rows.Add(row);
             }
-            for(int i=0;i<dataGridViewWorkList.Rows.Count;i++){
-                switch (dataGridViewWorkList.Rows[i].Cells[5].Value.ToString()) {
+            for (int i = 0; i < dataGridViewWorkList.Rows.Count; i++)
+            {
+                switch (dataGridViewWorkList.Rows[i].Cells[5].Value.ToString())
+                {
                     case "失败": dataGridViewWorkList.Rows[i].DefaultCellStyle.BackColor = Color.LightCoral; break;
                     case "成功": dataGridViewWorkList.Rows[i].DefaultCellStyle.BackColor = Color.LightGreen; break;
+                    case "进行中": dataGridViewWorkList.Rows[i].DefaultCellStyle.BackColor = Color.Yellow; break;
+                    default: dataGridViewWorkList.Rows[i].DefaultCellStyle.BackColor = Color.White; break;
                 }
-                
+
             }
             this.Update();
         }
+        #endregion
 
+        #region BusinessLogic
         private String FetchValidationCode(String userName)
         {
             Boolean fetched = false;
@@ -139,7 +172,7 @@ namespace SurveyFiller
                 {
                     if (fetchedSeqNo.Contains("重试"))
                     {
-                        UpdateWorkingStatus("短信发送频率超过限制，将在30秒后重试",2);
+                        UpdateWorkingStatus("短信发送频率超过限制，将在30秒后重试", 2);
                         System.Threading.Thread.Sleep(30000);
                     }
                     else
@@ -162,8 +195,8 @@ namespace SurveyFiller
                 return;
             }
             UpdateWorkingStatus("Excel读取完成", 1);
-            UpdateWorkLoadPanel();            
+            UpdateWorkLoadPanel();
         }
-
+        #endregion
     }
 }

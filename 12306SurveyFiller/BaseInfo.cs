@@ -9,13 +9,17 @@ namespace SurveyFiller
         public String TravelDate { get; private set;  }
         public String TravelTrainNumber { get; private set; }
         public String OnBoardStation { get; private set; }
+        public String OnBoardStationDisplay { get; private set; }
+        public String OffBoardStationDisplay { get; private set; }
         public String OffBoardStation { get; private set; }
         public TrainInfo(String travelDate, String travelTrainNumber, String onBoardStation, String offBoardStation)
         {
             this.TravelDate = travelDate;
             this.TravelTrainNumber = travelTrainNumber;
             this.OnBoardStation = onBoardStation;
+            this.OnBoardStationDisplay = onBoardStation;
             this.OffBoardStation = offBoardStation;
+            this.OffBoardStationDisplay = offBoardStation;
         }
 
         public void TranslateStation(String on, String off){
@@ -31,24 +35,19 @@ namespace SurveyFiller
         public TrainInfo TravelRecord;
         public String SurveyStatus;
         public String SurveyNumber;
-        public SurveyBaseInfo(String userName, TrainInfo tr)
-        {
-            this.UserName = userName;
-            this.TravelRecord = tr;
-            this.SurveyStatus = "等待";
-        }
 
-        public SurveyBaseInfo(String userName, TrainInfo tr, String failedReason)
+        public SurveyBaseInfo(String userName, TrainInfo tr, String failedReason="")
         {
             this.UserName = userName;
             this.TravelRecord = tr;
-            this.SurveyStatus = "失败";
+            this.SurveyStatus = failedReason==""?"等待":"失败";
             this.SurveyNumber = failedReason;
         }
 
-        public String WrapSurveyBaseInfo()
+        public String WrapSurveyBaseInfo(String province)
         {
-            String info = "{userName:" + this.UserName + ",datepicker:" + this.TravelRecord.TravelDate + ",board_train_no:" + this.TravelRecord.TravelTrainNumber + ",board_station:" + this.TravelRecord.OnBoardStation + ",down_station:" + this.TravelRecord.OffBoardStation + "}";
+            this.Province = province;
+            String info = "{userName:" + this.UserName + ",datepicker:" + this.TravelRecord.TravelDate + ",board_train_no:" + this.TravelRecord.TravelTrainNumber + ",board_station:" + this.TravelRecord.OnBoardStation + ",down_station:" + this.TravelRecord.OffBoardStation + ",province:"+this.Province+"}";
             return info;
         }
 

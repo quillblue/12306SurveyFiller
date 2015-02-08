@@ -40,7 +40,7 @@ namespace SurveyFiller
             }
             catch (Exception e)
             {
-                return "系统异常," + e.Message;
+                return "[可重试]SystemError:" + e.Message;
             }
         }
 
@@ -75,7 +75,7 @@ namespace SurveyFiller
             }
             catch (Exception e)
             {
-                return "system_unknownError";
+                return "[可重试]SystemError:" + e.Message;
             }
         }
 
@@ -88,7 +88,7 @@ namespace SurveyFiller
                 case "uName_error": translation = "用户名不正确"; break;
                 case "session_timeout": translation = "当前验证码已过期"; break;
                 case "system_unknownError": translation = "问卷系统异常"; break;
-                default: translation = errorCode+"（或由系统抽风所致，仅供参考）"; break;
+                default: translation = errorCode+"（仅供参考）"; break;
             }
             return translation;
         }
