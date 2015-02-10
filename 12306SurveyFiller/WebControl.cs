@@ -57,7 +57,7 @@ namespace SurveyFiller
             }
             catch (Exception e)
             {
-                return "0#" + e.Message;
+                return "E[可重试]" + e.Message;
             }
         }
 
@@ -75,7 +75,7 @@ namespace SurveyFiller
                     int surveyNoStart = st.IndexOf("surveyNo\" value=") + 17;
                     if (surveyNoStart != 16)
                     {
-                        return "1#" + st.Substring(surveyNoStart, 10);
+                        return "S" + st.Substring(surveyNoStart, 10);
                     }
                     else
                     {
@@ -83,14 +83,14 @@ namespace SurveyFiller
                         st = st.Substring(msgStart);
                         int msgEnd = st.IndexOf('"');
                         st = st.Substring(0, msgEnd);
-                        if (st == "") { return "0#问卷系统未知错误"; }
-                        return "0#" + st;
+                        if (st == "") { return "E[可重试]问卷系统未知错误"; }
+                        return "E" + st;
                     }
                 }
                 catch (Exception e)
                 {
                     string reason = e.ToString();
-                    return "0#" + reason.Substring(0, reason.IndexOf('\n') - 1);
+                    return "E" + reason.Substring(0, reason.IndexOf('\n') - 1);
                 }
             }
         }
