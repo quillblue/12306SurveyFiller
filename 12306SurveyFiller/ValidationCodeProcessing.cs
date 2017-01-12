@@ -17,9 +17,10 @@ namespace SurveyFiller
 
             String ResultCode = "";
             String Seq_No = "";
-            JsonReader reader = new JsonTextReader(new StringReader(response));
+            if (response[0] == 'E') { return response.Substring(1); }
             try
             {
+                JsonReader reader = new JsonTextReader(new StringReader(response));
                 while (reader.Read())
                 {
                     if (reader.Path == "resultCode")
@@ -71,7 +72,7 @@ namespace SurveyFiller
                         ResultData = reader.Value.ToString();
                     }
                 }
-                return ResultCode=="busFail"?ResultData:ResultCode;
+                return ResultCode == "busFail" ? ResultData : ResultCode;
             }
             catch (Exception e)
             {
@@ -88,7 +89,7 @@ namespace SurveyFiller
                 case "uName_error": translation = "用户名不正确"; break;
                 case "session_timeout": translation = "当前验证码已过期"; break;
                 case "system_unknownError": translation = "问卷系统异常"; break;
-                default: translation = errorCode+"（仅供参考）"; break;
+                default: translation = errorCode + "（仅供参考）"; break;
             }
             return translation;
         }

@@ -10,27 +10,40 @@ namespace SurveyFiller
         Dictionary<String,String> StationDict=new Dictionary<String,String>();
         Dictionary<String, String> AntiStationDict = new Dictionary<String, String>();
         public void LoadDict() {
-            FileStream fs = new FileStream("StationList.txt", FileMode.OpenOrCreate);
-            StreamReader sr = new StreamReader(fs, Encoding.GetEncoding("gb2312"));
-            string line, StationName, TelegramCode;
-            while (!sr.EndOfStream)
-            {
-                line = sr.ReadLine().Trim();
-                if (line.Contains(" "))
-                {
-                    StationName = line.Substring(0, line.IndexOf(' '));
-                    TelegramCode = line.Substring(line.IndexOf(' ') + 1);
+            WebControl wc = WebControl.Instance();
+            StationDict = wc.GetStationList();
+            if (StationDict.Count > 0) {
+                foreach (String station in StationDict.Keys) {
+                    if (!AntiStationDict.ContainsKey(StationDict[station]))
+                    {
+                        AntiStationDict.Add(StationDict[station], station);
+                    }
                 }
-                else
-                {
-                    StationName = line.Substring(0, line.IndexOf('\t'));
-                    TelegramCode = line.Substring(line.IndexOf('\t') + 1);
-                }
-                StationDict.Add(StationName, TelegramCode);
-                AntiStationDict.Add(TelegramCode, StationName);
             }
-            sr.Close();
-            fs.Close();
+            else
+            {
+                FileStream fs = new FileStream("StationList.txt", FileMode.OpenOrCreate);
+                StreamReader sr = new StreamReader(fs, Encoding.GetEncoding("gb2312"));
+                string line, StationName, TelegramCode;
+                while (!sr.EndOfStream)
+                {
+                    line = sr.ReadLine().Trim();
+                    if (line.Contains(" "))
+                    {
+                        StationName = line.Substring(0, line.IndexOf(' '));
+                        TelegramCode = line.Substring(line.IndexOf(' ') + 1);
+                    }
+                    else
+                    {
+                        StationName = line.Substring(0, line.IndexOf('\t'));
+                        TelegramCode = line.Substring(line.IndexOf('\t') + 1);
+                    }
+                    StationDict.Add(StationName, TelegramCode);
+                    AntiStationDict.Add(TelegramCode, StationName);
+                }
+                sr.Close();
+                fs.Close();
+            }
         }
         public String GetTelegramCode(String stationName) {
             try

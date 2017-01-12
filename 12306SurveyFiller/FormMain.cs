@@ -15,6 +15,7 @@ namespace SurveyFiller
         SurveyControl sc = new SurveyControl();
         ValidationCodeProcessing vcp = new ValidationCodeProcessing();
         List<SurveyBaseInfo> workLoad = new List<SurveyBaseInfo>();
+        bool interuptFlag = false;
 
         public FormMain()
         {
@@ -57,6 +58,11 @@ namespace SurveyFiller
                     UpdateWorkingStatus("【第" + i + "张问卷】正在进行短信验证");
 
                     String fetchResult = FetchValidationCode(sbi.UserName);
+                    if (fetchResult == "TERMINATED") {
+                        UpdateWorkingStatus("【第" + i + "张问卷】正在进行短信验证",2);
+                        UnlockConfigPanel();
+                        return;
+                    }
                     if (fetchResult.Length != 4)
                     {
                         sbi.UpdateStatus("失败", fetchResult);
@@ -125,6 +131,7 @@ namespace SurveyFiller
             panelConfig.Enabled = false;
             btnStart.Enabled = false;
             btnExport.Enabled = false;
+            btnAbort.Enabled = true;
         }
 
         private void UnlockConfigPanel()
@@ -132,6 +139,8 @@ namespace SurveyFiller
             panelConfig.Enabled = true;
             btnStart.Enabled = true;
             btnExport.Enabled = true;
+            btnAbort.Enabled = false;
+            interuptFlag = false;
         }
         #endregion
 
@@ -187,8 +196,24 @@ namespace SurveyFiller
                 {
                     if (fetchedSeqNo.Contains("重试"))
                     {
-                        UpdateWorkingStatus("短信发送频率超过限制，将在30秒后重试", 2);
-                        System.Threading.Thread.Sleep(30000);
+                        if (fetchedSeqNo.Contains("达到设定上限"))
+                        {
+                            
+                            DateTime curTime = DateTime.Now;
+                            while (curTime.AddSeconds(30) >= DateTime.Now) {
+                                UpdateWorkingStatus(String.Format("短信发送频率超过限制，将在{0}秒后重试",30-(DateTime.Now-curTime).Seconds), 2);
+                                if (interuptFlag) {
+                                    return "TERMINATED";
+                                }
+                                Application.DoEvents();
+                            }
+                            
+                        }
+                        else {
+                            UpdateWorkingStatus("出现错误["+fetchedSeqNo+"]，将在2秒后重试", 2);
+                            System.Threading.Thread.Sleep(2000);
+                            Application.DoEvents();
+                        }
                     }
                     else
                     {
@@ -213,5 +238,10 @@ namespace SurveyFiller
             UpdateWorkLoadPanel();
         }
         #endregion
+
+        private void btnAbort_Click(object sender, EventArgs e)
+        {
+            interuptFlag = true;
+        }
     }
 }

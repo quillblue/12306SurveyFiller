@@ -4,6 +4,8 @@ using System.Text;
 using System.Net;
 using System.IO;
 using Newtonsoft.Json;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
 
 namespace SurveyFiller
 {
@@ -61,6 +63,28 @@ namespace SurveyFiller
             }
         }
 
+        public Dictionary<String, String> GetStationList()
+        {
+            Dictionary<String, String> dict = new Dictionary<string, string>();
+            try
+            {
+                ServicePointManager.ServerCertificateValidationCallback += RemoteCertificateValidate;
+                String st = PostHttpRequest("http://kyfw.12306.cn/otn/resources/js/framework/station_name.js", "");
+                st = st.Split('\'')[1];
+                String[] result = st.Split('@');
+
+                foreach (String station in result)
+                {
+                    String[] temp = station.Split('|');
+                    if (temp.Length > 3)
+                    {
+                        dict.Add(temp[1], temp[2]);
+                    }
+                }
+                return dict;
+            }
+            catch (Exception ex) { return dict; }
+        }
         public String PostSurvey(String postData)
         {
             String st = PostHttpRequest("http://dynamic.12306.cn/surweb/questionnaireAction.do?method=submitQuest", postData);
@@ -93,6 +117,11 @@ namespace SurveyFiller
                     return "E" + reason.Substring(0, reason.IndexOf('\n') - 1);
                 }
             }
+        }
+
+        private static bool RemoteCertificateValidate(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors error)
+        {
+            return true;
         }
 
     }
